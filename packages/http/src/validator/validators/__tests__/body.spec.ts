@@ -296,3 +296,21 @@ describe('decodeUriEntities', () => {
     expect(results).toEqual({ 'profile-Image': target['profile%2DImage'] });
   });
 });
+
+describe('invalid schema', () => {
+  it('throws when the schema is invalid', () => {
+    // @ts-expect-error invalid schema for test case
+    const mockSchema: JSONSchema = { type: 'foo' };
+
+      assertLeft(
+        validate(
+          'test',
+          [{ id: faker.random.word(), mediaType: 'application/json', schema: mockSchema, examples: [], encodings: [] }],
+          ValidationContext.Input,
+          'application/json'
+        ),
+        error =>
+          expect(error).toBeDefined()
+      );
+  })
+})
